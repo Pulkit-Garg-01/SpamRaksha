@@ -15,7 +15,7 @@ class User(AbstractUser):
 class Company(models.Model):
     company_name=models.CharField(max_length=50,blank=True, null=True)
     email=models.EmailField( )
-    password=models.CharField(blank=True, null=True)
+    password=models.CharField(max_length=15,blank=True, null=True)
     username=models.CharField(max_length=50, blank=True, null=True)
     
     REQUIRED_FIELDS = ['email', 'company_name', 'username']
