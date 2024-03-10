@@ -4,6 +4,10 @@ import nltk
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets, status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+# from doc.api.serializers.group import GroupSerializer
 from Spamchan.serializers import ReportSerializer
 from Spamchan.models import Report, FraudulentUser, User, Company
 from Spamchan.services import remove_tags, lemmatize_text
@@ -12,6 +16,7 @@ from keras.preprocessing.sequence import pad_sequences
 
 w_tokenizer = nltk.tokenize.WhitespaceTokenizer()
 lemmatizer = nltk.stem.WordNetLemmatizer()
+
 
 class ReportModelViewset(viewsets.ModelViewSet):
     serializer_class= ReportSerializer

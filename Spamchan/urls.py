@@ -6,7 +6,7 @@ router=DefaultRouter()
 
 router.register('report', ReportModelViewset, basename='report')
 
-app = 'SpamChan'
 urlpatterns = [
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),
+    path('spam/', SpamAPIView.as_view()),
 ]
