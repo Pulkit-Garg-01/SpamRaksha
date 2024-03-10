@@ -1,2 +1,1 @@
-from . import ReportFraud
-from .Reporter import ReporterViewset
+from .report import ReportModelViewset

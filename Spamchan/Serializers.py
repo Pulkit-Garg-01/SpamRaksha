@@ -23,7 +23,7 @@ class AppSerializer(serializers.ModelSerializer):
         fields='__all__'
         
         
-class ReporterSerializer(serializers.ModelSerializer):
+class ReportSerializer(serializers.ModelSerializer):
     class Meta:
-        model=Reporter
+        model=Report
         fields='__all__'

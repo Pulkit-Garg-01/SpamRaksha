@@ -1,15 +1,12 @@
 from django.urls import path,include
-from rest_framework import routers
-from .views import ReporterViewset
+from rest_framework.routers import DefaultRouter
+from Spamchan.views import *
 
-router=routers.DefaultRouter()
-# router.register(r'documents',views.document.DocumentViewset)
-router.register(r'users',ReporterViewset)
+router=DefaultRouter()
 
-# router.register(r'')
-urlpatterns = router.urls
+router.register('report', ReportModelViewset, basename='report')
 
-urlpatterns += [
-    # path('save_report/', save_report, name='save_report'),
-    # Other URL patterns...
+app = 'SpamChan'
+urlpatterns = [
+    path('api/', include(router.urls)),
 ]
