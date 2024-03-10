@@ -101,7 +101,7 @@ def sentiment_model_train():
         sentiment_model.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])
 
         print("Training...")
-        num_epochs = 1
+        num_epochs = 5
         sentiment_model.fit(train_padded, train_labels, epochs=num_epochs, verbose=1, validation_split=0.1)
 
         with open('sentiment_model.pkl', 'wb') as f:
