@@ -51,11 +51,11 @@ class ReportModelViewset(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         report_message = request.data.get('message', None)
-        company_id = request.data.get('company', None)
+        company_id = request.data.get('reported_to', None)
         reporter_id = request.data.get('reporter', None)
         spammer_phno = request.data.get('spammer', None)
 
-        # report_message = "bad kill poison die"
+        report_message = "bad kill poison die"
 
         report_message = remove_tags(report_message)
         report_message = lemmatize_text(report_message)
@@ -90,7 +90,7 @@ class ReportModelViewset(viewsets.ModelViewSet):
             frauder = FraudulentUser.objects.get(phone_number=spammer_phno)
         except ObjectDoesNotExist:
             frauder = FraudulentUser(
-                email="spammer",
+                email=f"{spammer_phno}@gmail.com",
                 phone_number=spammer_phno,
                 spam_potent=0
             )
@@ -98,19 +98,20 @@ class ReportModelViewset(viewsets.ModelViewSet):
         
         frauder_reports = Report.objects.filter(spammer=frauder)
         report_count = len(frauder_reports)
-        updated_potent = ((frauder.spam_potent*report_count) + (1-prediction[0])) / (report_count+1)
+        # updated_potent = ((frauder.spam_potent*report_count) + (1-prediction[0])) / (report_count+1)
+        updated_potent = ((frauder.spam_potent*report_count) + prediction[0]) / (report_count+1)
         frauder.spam_potent = updated_potent
         frauder.save()
 
         try:
             reporter = User.objects.get(id=reporter_id)
         except ObjectDoesNotExist:
-            return Response({"message": "WTF!"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": "R!"}, status=status.HTTP_404_NOT_FOUND)
         
         try:
             company = Company.objects.get(id=company_id)
         except ObjectDoesNotExist:
-            return Response({"message": "WTF!"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": "C!"}, status=status.HTTP_404_NOT_FOUND)
 
         try:
             report = Report(
@@ -123,4 +124,4 @@ class ReportModelViewset(viewsets.ModelViewSet):
         except Exception as e:
             return Response({"message": getattr(e, "message", repr(e))}, status=status.HTTP_417_EXPECTATION_FAILED)
 
-        return Response(prediction[0])
+        return Response({"credibility_score": updated_potent*5, }, status=status.HTTP_200_OK)
